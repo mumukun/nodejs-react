@@ -39,7 +39,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin(Object.assign({
-      'process.env': { NODE_ENV: JSON.stringify(project.env) },
+      'process.env': {NODE_ENV: JSON.stringify(project.env)},
       __DEV__,
       __TEST__,
       __PROD__,
@@ -96,6 +96,18 @@ const extractStyles = new ExtractTextPlugin({
   disable: __DEV__,
 })
 
+// less loader
+config.module.rules.push({
+  test: /\.less$/,
+  use: [{
+    loader: "style-loader" // creates style nodes from JS strings
+  }, {
+    loader: "css-loader" // translates CSS into CommonJS
+  }, {
+    loader: "less-loader" // compiles Less to CSS
+  }]
+})
+
 config.module.rules.push({
   test: /\.(sass|scss)$/,
   loader: extractStyles.extract({
@@ -112,7 +124,7 @@ config.module.rules.push({
               browsers: ['last 2 versions'],
             },
             discardComments: {
-              removeAll : true,
+              removeAll: true,
             },
             discardUnused: false,
             mergeIdents: false,
@@ -134,21 +146,24 @@ config.module.rules.push({
     ],
   })
 })
+
+
 config.plugins.push(extractStyles)
 
 // Images
 // ------------------------------------
 config.module.rules.push({
-  test    : /\.(png|jpg|gif)$/,
-  loader  : 'url-loader',
-  options : {
-    limit : 8192,
+  test: /\.(png|jpg|gif)$/,
+  loader: 'url-loader',
+  options: {
+    limit: 8192,
   },
 })
 
 // Fonts
 // ------------------------------------
-;[
+;
+[
   ['woff', 'application/font-woff'],
   ['woff2', 'application/font-woff2'],
   ['otf', 'font/opentype'],
@@ -160,11 +175,11 @@ config.module.rules.push({
   const mimetype = font[1]
 
   config.module.rules.push({
-    test    : new RegExp(`\\.${extension}$`),
-    loader  : 'url-loader',
-    options : {
-      name  : 'fonts/[name].[ext]',
-      limit : 10000,
+    test: new RegExp(`\\.${extension}$`),
+    loader: 'url-loader',
+    options: {
+      name: 'fonts/[name].[ext]',
+      limit: 10000,
       mimetype,
     },
   })
@@ -201,7 +216,7 @@ if (!__TEST__) {
     bundles.unshift('vendor')
     config.entry.vendor = project.vendors
   }
-  config.plugins.push(new webpack.optimize.CommonsChunkPlugin({ names: bundles }))
+  config.plugins.push(new webpack.optimize.CommonsChunkPlugin({names: bundles}))
 }
 
 // Production Optimizations

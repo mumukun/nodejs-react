@@ -1,0 +1,23 @@
+{
+  "plugins": [
+    [
+      "import",
+      [
+        {
+          "libraryName": "antd",
+          "libraryDirectory": "lib",
+          // default: lib
+          "style": true
+        },
+        {
+          "libraryName": "antd-mobile"
+        }
+      ]
+    ]
+  ],
+  "presets": [
+    "env",
+    "react",
+    "stage-0"
+  ]
+}
