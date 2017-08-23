@@ -17,7 +17,10 @@ run mongodd on a separated terminal instance:
 ```
 mongod
 ```
-
+install 
+```
+ npm install  || yarn install 
+```
 run the app:
 
 ```bash
