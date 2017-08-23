@@ -1,6 +1,6 @@
 require('es6-promise').polyfill();
 import 'whatwg-fetch';
-import {busy, idle} from '../../src/public/components/Loading';
+import {busy, idle} from '../common/components/Loading';
 const headers = {
   'Content-Type': 'application/json',
   'cache-control': 'no-cache',

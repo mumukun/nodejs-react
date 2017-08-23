@@ -40,7 +40,7 @@ db.on('close', function() {
 
 
 app.listen(config.server.port, () => {
-  console.log(`见证奇迹的时刻Magic happens on port ${config.server.port}`);
+  console.log(`见证奇迹的时刻 - Magic happens on port ${config.server.port}`);
 });
 
 module.exports = app;
