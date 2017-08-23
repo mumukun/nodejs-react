@@ -48,6 +48,7 @@ class UploadView extends React.Component {
         {/*</FormItem>*/}
         {/*</Form>*/}
         <Button type="primary" onClick={this.handleSubmit.bind(this)} htmlType="submit">保存</Button>
+        <Button type="primary" onClick={this.addPet.bind(this)} htmlType="submit">添加</Button>
       </div>
     )
   }
@@ -96,6 +97,19 @@ class UploadView extends React.Component {
     //   console.log('Request failed', error)
     // });
 
+  }
+
+  addPet() {
+    const {actions} = this.props
+    const data = {
+      title: 'title1',
+      body: 'body1'
+    }
+    actions.dispatchPetAdd({}, data).then((rst)=> {
+      console.log('rst', rst)
+    }).catch((error)=> {
+      console.log('error', error)
+    })
   }
 }
 
