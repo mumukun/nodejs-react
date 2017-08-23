@@ -5,10 +5,10 @@ const user = require('./model/user/router');
 const pet = require('./model/pet/router');
 
 router.route('/').get((req, res) => {
-  res.json({ message: 'Welcome to life-record API!' });
+  res.json({message: 'Welcome to life-record API!'});
 });
 
-router.use('/user', user);
-router.use('/pet', pet);
+router.use('/api/user', user);
+router.use('/api/pet', pet);
 
 module.exports = router;
