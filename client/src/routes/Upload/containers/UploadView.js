@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import * as actions  from '../store/upload'
 
-import {Form, Select, Input, Button} from 'antd'
+import {Form, Select, Input, Button, Upload, Icon} from 'antd'
 const FormItem = Form.Item
 
 
@@ -19,36 +19,75 @@ const FormItem = Form.Item
 //   })
 // )
 class UploadView extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fileList: [],
+    }
+
+  }
+
   render() {
     const {getFieldDecorator} = this.props.form
     const formItemLayout = {
       labelCol: {span: 6},
       wrapperCol: {span: 14},
     }
+    const ImageProps = {
+      action: '/api/picture/upload-pic',
+      listType: 'picture-card',
+      fileList: [],
+
+    }
+
     return (
       <div>
-        {/*<Form*/}
-        {/*onSubmit={this.handleSubmit.bind(this)}*/}
-        {/*>*/}
+        <Form
+          onSubmit={this.handleSubmit.bind(this)}
+        >
 
-        {/*<FormItem*/}
-        {/*{...formItemLayout}*/}
-        {/*label="相册标题"*/}
-        {/*>*/}
-        {/*{getFieldDecorator('comment')(*/}
-        {/*<Input type="textarea" placeholder="起个标题吧1" id="error"/>*/}
-        {/*)}*/}
+          <FormItem
+            {...formItemLayout}
+            label="相册标题"
+          >
+            {getFieldDecorator('comment')(
+              <Input type="textarea" placeholder="起个标题吧1" id="error"/>
+            )}
 
-        {/*</FormItem>*/}
+          </FormItem>
 
-        {/*<FormItem*/}
-        {/*wrapperCol={{span: 12, offset: 6}}*/}
-        {/*>*/}
-        {/*<Button type="primary" htmlType="submit">保存</Button>*/}
-        {/*</FormItem>*/}
-        {/*</Form>*/}
-        <Button type="primary" onClick={this.handleSubmit.bind(this)} htmlType="submit">保存</Button>
-        <Button type="primary" onClick={this.addPet.bind(this)} htmlType="submit">添加</Button>
+          {/*<FormItem*/}
+          {/*{...formItemLayout}*/}
+          {/*label="Upload"*/}
+          {/*extra=""*/}
+          {/*>*/}
+          {/*{getFieldDecorator('upload', {*/}
+          {/*valuePropName: 'fileList',*/}
+          {/*})(*/}
+          {/*<Upload  {...ImageProps} fileList={this.state.fileList}>*/}
+          {/*<Button>*/}
+          {/*<Icon type="upload"/> 点击上传*/}
+          {/*</Button>*/}
+          {/*</Upload>*/}
+          {/*)}*/}
+          {/*</FormItem>*/}
+
+
+          <FormItem
+            wrapperCol={{span: 12, offset: 6}}
+          >
+            <Button type="primary" htmlType="submit">保存</Button>
+          </FormItem>
+        </Form>
+
+
+        <Upload  {...ImageProps} fileList={this.state.fileList}>
+          <Button>
+            <Icon type="upload"/> 点击上传
+          </Button>
+        </Upload>
+        
+
       </div>
     )
   }

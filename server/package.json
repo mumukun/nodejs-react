@@ -18,7 +18,8 @@
     "helmet": "^3.1.0",
     "moment": "^2.18.1",
     "mongoose": "^4.7.0",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "qiniu": "^7.0.7"
   },
   "devDependencies": {
     "eslint": "^3.11.1",

@@ -1,2 +1,6 @@
-const ACCESS_KEY = '**************'
-const SECRET_KEY = '**************'
+const qiniuConfig = {
+  ACCESS_KEY: '******',
+  SECRET_KEY: '******'
+}
+
+module.exports = qiniuConfig;

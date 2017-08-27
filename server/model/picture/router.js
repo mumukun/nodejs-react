@@ -7,8 +7,7 @@ router.route('/')
   .post((...args) => controller.create(...args));
 
 router.route('/upload-pic')
-  .get((...args) => controller.find(...args))
-  .post((...args) => controller.create(...args));
+  .post((...args) => controller.uploadPic(...args));
 
 
 router.route('/:id')
