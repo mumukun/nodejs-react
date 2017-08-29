@@ -4,7 +4,10 @@ import {busy, idle} from '../common/components/Loading';
 const headers = {
   'Content-Type': 'application/json',
   'cache-control': 'no-cache',
-  'pragma': 'no-cache'
+  'pragma': 'no-cache',
+  'Access-Control-Allow-Origin':'*',
+  "Access-Control-Allow-Headers":"X-Requested-With", 
+  "Access-Control-Allow-Methods":"PUT,POST,GET,DELETE,OPTIONS"
 };
 /**
  *

@@ -34,12 +34,16 @@ class UploadView extends React.Component {
       wrapperCol: {span: 14},
     }
     const ImageProps = {
+      name: 'file',
       action: '/api/picture/upload-pic',
       listType: 'picture-card',
       fileList: [],
-
+      headers: {
+        authorization: 'authorization-text',
+      },
     }
 
+    console.log('state', this.state)
     return (
       <div>
         <Form
@@ -81,12 +85,20 @@ class UploadView extends React.Component {
         </Form>
 
 
-        <Upload  {...ImageProps} fileList={this.state.fileList}>
-          <Button>
-            <Icon type="upload"/> 点击上传
-          </Button>
-        </Upload>
-        
+        {/*<Upload  {...ImageProps} fileList={this.state.fileList}>*/}
+        {/*<Button>*/}
+        {/*<Icon type="upload"/> 点击上传*/}
+        {/*</Button>*/}
+        {/*</Upload>*/}
+
+        {/*<form action="/api/picture/upload-pic" method="post" enctype="multipart/form-data">*/}
+        {/*<input id="upload-input" type="file" name="uploads"/>*/}
+
+
+        {/*<button onClick={this.submit.bind(this)}>提交</button>*/}
+
+        <input type="file" onChange={this.handleFileUpload.bind(this)}/>
+        <button onClick={this.submit.bind(this)}>提交</button>
 
       </div>
     )
@@ -95,6 +107,38 @@ class UploadView extends React.Component {
   componentDidMount = () => {
 
   }
+
+
+  handleFileUpload(e) {
+    const reader = new FileReader();
+    const file = e.target.files[0];
+
+    console.log('file====', file)
+    reader.onload = (upload) => {
+      this.setState({
+        data_uri: upload.target.result,
+        filename: file.name,
+        filetype: file.type
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
+
+  submit() {
+    const {actions} = this.props
+    const data = {
+      data_uri: this.state.data_uri,
+      filename: this.state.filename,
+      filetype: this.state.filetype
+    }
+
+    actions.dispatchUpload({}, data).then(rst=> {
+      console.log('rst====', rst)
+    })
+  }
+
+
   /**
    * form submit
    * @param e
