@@ -3,7 +3,9 @@
 [![generator-api](https://img.shields.io/badge/built%20with-generator--api-green.svg)](https://github.com/ndelvalle/generator-api)
 
 life-record
+## instruct
 
+This is a restful style API interface program,
 
 
 ## dependencies
@@ -27,18 +29,24 @@ run the app:
 npm run dev
 ```
 
-the app runs on `localhost:8080`
+the app api runs on `localhost:8080`
 
 ## production
 
-_you'll likely be consuming mongodb as a service, so make sure you set the env var to connect to it._
+_is a mongodb service ,you can use it to build you own api program_
 
-```bash
-npm start
-```
+## keyword 
++ express 
++ restful
++ qiniu
++ CURD
+
 
 
 
 
 
 --------------------------------------------------------------------------------
+
+## License
+MIT
