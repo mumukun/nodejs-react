@@ -18,22 +18,21 @@
     "url": "git+https://github.com/davezuko/react-redux-starter-kit.git"
   },
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
-  "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.0.0-alpha",
     "compression": "^1.6.2",
     "express": "^4.14.0",
+    "material-ui": "^0.19.4",
     "object-assign": "^4.1.1",
     "promise": "^7.1.1",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
-    "react-router": "^3.0.0",
+    "react-router": "3.2.0",
     "redbox-react": "^1.3.6",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
-    "video-react": "^0.8.8",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
@@ -87,5 +86,6 @@
     "webpack-dev-middleware": "^1.8.4",
     "webpack-hot-middleware": "^2.13.2",
     "yargs": "^8.0.1"
-  }
+  },
+  "license": "MIT"
 }

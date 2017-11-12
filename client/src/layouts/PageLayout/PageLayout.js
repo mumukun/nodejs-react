@@ -1,15 +1,17 @@
 import React from 'react'
-import { IndexLink, Link } from 'react-router'
+import {IndexLink, Link} from 'react-router'
 import PropTypes from 'prop-types'
-import './PageLayout.scss'
+import './PageLayout.less'
+import {AppBar} from 'material-ui';
 
-export const PageLayout = ({ children }) => (
-  <div className='container text-center'>
-    <h1>React Redux Starter Kit</h1>
-    <IndexLink to='/' activeClassName='page-layout__nav-item--active'>Home</IndexLink>
-    {' · '}
-    <Link to='/counter' activeClassName='page-layout__nav-item--active'>Counter</Link>
+export const PageLayout = ({children}) => (
+  <div className=''>
+
     <div className='page-layout__viewport'>
+      <AppBar style={{boxShadow: "none"}}
+              title=""
+              iconClassNameRight="muidocs-icon-navigation-expand-more"
+      />
       {children}
     </div>
   </div>
