@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Drawer,Avatar,MenuItem} from 'material-ui'
+import {Drawer, Avatar, MenuItem} from 'material-ui'
 import {spacing, typography} from 'material-ui/styles'
 import {white, blue600} from 'material-ui/styles/colors'
 import {Link} from 'react-router'
-const Sider = (props) => {
-  let { navDrawerOpen } = props;
+
+const LeftDrawer = (props) => {
+  let {navDrawerOpen} = props;
 
   const styles = {
     logo: {
@@ -25,7 +26,7 @@ const Sider = (props) => {
     avatar: {
       div: {
         padding: '15px 0 20px 15px',
-        backgroundImage:  'url(' + require('../images/material_bg.png') + ')',
+        backgroundImage: '',
         height: 45
       },
       icon: {
@@ -72,10 +73,10 @@ const Sider = (props) => {
   );
 };
 
-Sider.propTypes = {
+LeftDrawer.propTypes = {
   navDrawerOpen: PropTypes.bool,
   menus: PropTypes.array,
   username: PropTypes.string,
 };
 
-export default Sider;
+export default LeftDrawer;

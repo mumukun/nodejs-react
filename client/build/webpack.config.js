@@ -32,6 +32,9 @@ const config = {
       'node_modules',
     ],
     extensions: ['*', '.js', '.jsx', '.json'],
+    alias: {
+      src: path.resolve(__dirname, '../src/'),
+    }
   },
   externals: project.externals,
   module: {
@@ -100,7 +103,6 @@ config.module.rules.push({
   use: ['style-loader', 'css-loader']
 })
 
-
 config.module.rules.push({
   test: /\.less$/,
   loader: extractStyles.extract({
@@ -129,45 +131,6 @@ config.module.rules.push({
       },
       {
         loader: 'less-loader',
-        options: {
-          sourceMap: project.sourcemaps,
-          includePaths: [
-            inProjectSrc('styles'),
-          ],
-        },
-      }
-    ],
-  })
-})
-
-config.module.rules.push({
-  test: /\.(sass|scss)$/,
-  loader: extractStyles.extract({
-    fallback: 'style-loader',
-    use: [
-      {
-        loader: 'css-loader',
-        options: {
-          sourceMap: project.sourcemaps,
-          minimize: {
-            autoprefixer: {
-              add: true,
-              remove: true,
-              browsers: ['last 2 versions'],
-            },
-            discardComments: {
-              removeAll: true,
-            },
-            discardUnused: false,
-            mergeIdents: false,
-            reduceIdents: false,
-            safe: true,
-            sourcemap: project.sourcemaps,
-          },
-        },
-      },
-      {
-        loader: 'sass-loader',
         options: {
           sourceMap: project.sourcemaps,
           includePaths: [
