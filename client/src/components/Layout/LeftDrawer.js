@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Drawer, Avatar, MenuItem} from 'material-ui'
 import {spacing, typography} from 'material-ui/styles'
-import {white, blue600} from 'material-ui/styles/colors'
+import {white, blueGrey800,cyan500} from 'material-ui/styles/colors'
 import {Link} from 'react-router'
 
 const LeftDrawer = (props) => {
@@ -15,12 +15,12 @@ const LeftDrawer = (props) => {
       color: typography.textFullWhite,
       lineHeight: `${spacing.desktopKeylineIncrement}px`,
       fontWeight: typography.fontWeightLight,
-      backgroundColor: blue600,
+      backgroundColor: cyan500,
       paddingLeft: 40,
-      height: 56,
+      height: 64,
     },
     menuItem: {
-      color: white,
+      color: blueGrey800,
       fontSize: 14
     },
     avatar: {
@@ -38,7 +38,7 @@ const LeftDrawer = (props) => {
       span: {
         paddingTop: 12,
         display: 'block',
-        color: 'white',
+        color: blueGrey800,
         fontWeight: 300,
         textShadow: '1px 1px #444'
       }
@@ -52,12 +52,7 @@ const LeftDrawer = (props) => {
       <div style={styles.logo}>
         Material Admin
       </div>
-      <div style={styles.avatar.div}>
-        <Avatar src="http://www.material-ui.com/images/uxceo-128.jpg"
-                size={50}
-                style={styles.avatar.icon}/>
-        <span style={styles.avatar.span}>{props.username}</span>
-      </div>
+
       <div>
         {props.menus.map((menu, index) =>
           <MenuItem
