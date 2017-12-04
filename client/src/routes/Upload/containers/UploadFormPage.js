@@ -1,32 +1,50 @@
-import React from 'react';
-import {Link} from 'react-router';
-import RaisedButton from 'material-ui/RaisedButton';
-import MenuItem from 'material-ui/MenuItem';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import Toggle from 'material-ui/Toggle';
-import DatePicker from 'material-ui/DatePicker';
-import {grey400} from 'material-ui/styles/colors';
-import Divider from 'material-ui/Divider';
+import React from 'react'
+import {bindActionCreators} from 'redux'
+import {Link} from 'react-router'
+import {connect} from 'react-redux'
+import {Field, reduxForm} from 'redux-form'
+import RaisedButton from 'material-ui/RaisedButton'
+import MenuItem from 'material-ui/MenuItem'
+import TextField from 'material-ui/TextField'
+import SelectField from 'material-ui/SelectField'
+import {grey400} from 'material-ui/styles/colors'
+import Divider from 'material-ui/Divider'
 import Dropzone from 'react-dropzone'
 
-import IconButton from 'material-ui/IconButton';
-import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
-import FileFileUpload from 'material-ui/svg-icons/file/file-upload';
+import IconButton from 'material-ui/IconButton'
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
+import FileFileUpload from 'material-ui/svg-icons/file/file-upload'
 
-import PageBase from 'src/components/Layout/PageBase';
+import PageBase from 'src/components/Layout/PageBase'
+import asyncValidate from './asyncValidate'
+import * as actions from '../store/upload'
+
+const validate = values => {
+  const errors = {}
+  const requiredFields = ['firstName', 'lastName', 'email', 'favoriteColor', 'notes']
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = 'Required'
+    }
+  })
+  if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email address'
+  }
+  return errors
+}
 
 class UploadFormPage extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {files: []}
   }
 
-  componetDidMount() {
+  componetDidMount () {
 
   }
 
-  render() {
+  render () {
+
     const styles = {
       toggleDiv: {
         maxWidth: 300,
@@ -44,7 +62,7 @@ class UploadFormPage extends React.Component {
       saveButton: {
         marginLeft: 5
       }, fileButton: {
-        margin: 12,
+        margin: 12
       },
       exampleImageInput: {
         cursor: 'pointer',
@@ -54,47 +72,35 @@ class UploadFormPage extends React.Component {
         right: 0,
         left: 0,
         width: '100%',
-        opacity: 0,
+        opacity: 0
       },
       largeIcon: {
         width: 60,
-        height: 60,
+        height: 60
       },
       large: {
         width: 120,
         height: 120,
         padding: 30,
-        position: "relative",
-        marginLeft: "40px"
+        position: 'relative',
+        marginLeft: '40px'
       }
-    };
+    }
 
     return (
       <PageBase title="上传图片"
                 navigation="上传图片">
-        <form>
+        <form onSubmit={this.handleSubmit.bind(this)} type={'post'}>
 
           <TextField
-            hintText="Name"
-            floatingLabelText="Name"
+            hintText="说说这张照片"
+            floatingLabelText="说说这张照片"
             fullWidth={true}
           />
-
-          <SelectField
-            floatingLabelText="City"
-            value=""
-            fullWidth={true}>
-            <MenuItem key={0} primaryText="London"/>
-            <MenuItem key={1} primaryText="Paris"/>
-            <MenuItem key={2} primaryText="Rome"/>
-          </SelectField>
-
-          <DatePicker
-            hintText="Expiration Date"
-            floatingLabelText="Expiration Date"
-            fullWidth={true}/>
+          <div>
+            <Field name="lastName" component={this.renderTextField} label="Last Name"/>
+          </div>
           <section>
-
             <Dropzone onDrop={this.onDrop.bind(this)} accept="image/*">
               <p style={{textAlign: 'center'}}>请点击或拖拽上传文件</p>
               <IconButton iconStyle={styles.largeIcon}
@@ -110,22 +116,12 @@ class UploadFormPage extends React.Component {
             </aside>
           </section>
 
-          <div style={styles.toggleDiv}>
-            <Toggle
-              label="Disabled"
-              labelStyle={styles.toggleLabel}
-            />
-          </div>
-
-          <Divider/>
-
 
           <div style={styles.buttons}>
             <Link to="/">
-              <RaisedButton label="Cancel"/>
+              <RaisedButton label="取消"/>
             </Link>
-
-            <RaisedButton label="Save"
+            <RaisedButton label="保存"
                           style={styles.saveButton}
                           type="submit"
                           primary={true}/>
@@ -135,24 +131,24 @@ class UploadFormPage extends React.Component {
     )
   }
 
-  onDrop(files) {
+  onDrop (files) {
     this.setState({
       files
-    });
+    })
     console.log(files)
     files.forEach((file, index) => {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = () => {
         //base64data
-        const fileAsBinaryString = reader.result;
+        const fileAsBinaryString = reader.result
         console.log('fileAsBinaryString', fileAsBinaryString)
         // do whatever you want with the file content
 
-      };
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
+      }
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
 
-      reader.readAsBinaryString(file);
+      reader.readAsBinaryString(file)
     })
 
   }
@@ -160,7 +156,58 @@ class UploadFormPage extends React.Component {
   handleChange = ({files}) => {
     console.log(files)
   }
+  handleSubmit = (event, data) => {
+    event.preventDefault()
+    console.log('this.props.form', this.props.form)
+    console.log('this.props===', this.props)
+    console.log('event====', event)
+    console.log('data====', data)
+
+  }
+
+  renderTextField = props => (
+    <TextField hintText={props.label}
+               floatingLabelText={props.label}
+               errorText={props.touched && props.error}
+               {...props}
+    />
+  )
+
+  renderCheckbox = props => (
+    <Checkbox label={props.label}
+              checked={props.value ? true : false}
+              onCheck={props.onChange}/>
+  )
+
+  renderSelectField = props => (
+    <SelectField
+      floatingLabelText={props.label}
+      errorText={props.touched && props.error}
+      {...props}
+      onChange={(event, index, value) => props.onChange(value)}>
+    </SelectField>
+  )
+
 }
 
+const mapStateToProps = state => {
+  return {
+    form: state.form
+  }
+}
 
-export default UploadFormPage;
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+const UploadForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UploadFormPage)
+export default reduxForm({
+  form: 'MaterialUiForm',  // a unique identifier for this form
+  validate,
+  asyncValidate
+})(UploadForm)

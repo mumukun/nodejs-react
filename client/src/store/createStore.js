@@ -1,4 +1,5 @@
 import { applyMiddleware, compose, createStore as createReduxStore } from 'redux'
+import { reducer as formReducer } from 'redux-form'
 import thunk from 'redux-thunk'
 import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'

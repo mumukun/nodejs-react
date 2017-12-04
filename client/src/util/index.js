@@ -1,4 +1,6 @@
 import menuData from './data'
+import config from './config'
 
-module.exports = {
+export default {
+  config
 }

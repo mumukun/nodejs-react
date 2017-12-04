@@ -4,8 +4,11 @@ const config = {
     port: process.env.PORT || 8089
   },
   mongo: {
+    //local
+    url: process.env.MONGO_DB_URI || 'mongodb://localhost/life',
+//test
     url: process.env.MONGO_DB_URI || 'mongodb://localhost/life'
   }
-};
+}
 
-module.exports = config;
+module.exports = config
