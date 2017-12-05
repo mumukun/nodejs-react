@@ -2,7 +2,7 @@ import React from 'react'
 import {bindActionCreators} from 'redux'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
-import {Field, reduxForm} from 'redux-form'
+import {Field, reduxForm, formValues, formValueSelector} from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
 import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
@@ -90,7 +90,7 @@ class UploadFormPage extends React.Component {
     return (
       <PageBase title="上传图片"
                 navigation="上传图片">
-        <form onSubmit={this.handleSubmit.bind(this)} type={'post'}>
+        <form onSubmit={this.handleSubmit}>
 
           <TextField
             hintText="说说这张照片"
@@ -98,7 +98,14 @@ class UploadFormPage extends React.Component {
             fullWidth={true}
           />
           <div>
-            <Field name="lastName" component={this.renderTextField} label="Last Name"/>
+            <Field
+              name="firstName"
+              component={this.renderTextField}
+              label="First Name"
+            />
+          </div>
+          <div>
+            <Field name="lastName" component={this.renderTextField} label="Last Name" />
           </div>
           <section>
             <Dropzone onDrop={this.onDrop.bind(this)} accept="image/*">
@@ -156,22 +163,29 @@ class UploadFormPage extends React.Component {
   handleChange = ({files}) => {
     console.log(files)
   }
-  handleSubmit = (event, data) => {
+  handleSubmit = (event, values) => {
     event.preventDefault()
     console.log('this.props.form', this.props.form)
     console.log('this.props===', this.props)
     console.log('event====', event)
-    console.log('data====', data)
+    console.log('values====', values)
 
   }
 
-  renderTextField = props => (
-    <TextField hintText={props.label}
-               floatingLabelText={props.label}
-               errorText={props.touched && props.error}
-               {...props}
+
+  renderTextField =  ({
+                        input,
+                        label,
+                        meta: { touched, error },
+                        ...custom
+                      }) =>
+    <TextField
+      hintText={label}
+      floatingLabelText={label}
+      errorText={touched && error}
+      {...input}
+      {...custom}
     />
-  )
 
   renderCheckbox = props => (
     <Checkbox label={props.label}
@@ -190,9 +204,18 @@ class UploadFormPage extends React.Component {
 
 }
 
+UploadFormPage = reduxForm({
+  form: 'UploadFormPage',  // a unique identifier for this form
+  validate,
+  asyncValidate
+})(UploadFormPage)
+
+const selector = formValueSelector('UploadFormPage') // <-- same as form name
+
 const mapStateToProps = state => {
   return {
-    form: state.form
+    form: state.form,
+    // myValues: selector(state, 'lastName')
   }
 }
 
@@ -201,13 +224,14 @@ const mapDispatchToProps = dispatch => {
     actions: bindActionCreators(actions, dispatch)
   }
 }
-
-const UploadForm = connect(
+UploadFormPage = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  state => {
+    return {
+      myValues: selector(state, 'lastName')
+    }
+  }
 )(UploadFormPage)
-export default reduxForm({
-  form: 'MaterialUiForm',  // a unique identifier for this form
-  validate,
-  asyncValidate
-})(UploadForm)
+
+export default UploadFormPage
