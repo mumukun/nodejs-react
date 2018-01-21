@@ -21,10 +21,11 @@ import * as actions from '../store/upload'
 
 const validate = values => {
   const errors = {}
-  const requiredFields = ['firstName', 'lastName', 'email', 'favoriteColor', 'notes']
+  // const requiredFields = ['description']
+  const requiredFields = ['']
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = 'Required'
+      errors[field] = '必填'
     }
   })
   if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -40,7 +41,6 @@ class UploadFormPage extends React.Component {
   }
 
   componetDidMount () {
-
   }
 
   render () {
@@ -91,21 +91,10 @@ class UploadFormPage extends React.Component {
       <PageBase title="上传图片"
                 navigation="上传图片">
         <form onSubmit={this.handleSubmit}>
-
-          <TextField
-            hintText="说说这张照片"
-            floatingLabelText="说说这张照片"
-            fullWidth={true}
-          />
           <div>
             <Field
-              name="firstName"
-              component={this.renderTextField}
-              label="First Name"
+              name="description" fullWidth={true} component={this.renderTextField} label="说说这张照片"
             />
-          </div>
-          <div>
-            <Field name="lastName" component={this.renderTextField} label="Last Name" />
           </div>
           <section>
             <Dropzone onDrop={this.onDrop.bind(this)} accept="image/*">
@@ -142,20 +131,27 @@ class UploadFormPage extends React.Component {
     this.setState({
       files
     })
-    console.log(files)
+    const {actions} = this.props
+    console.log('actions', actions)
+    console.log('this', this.props)
+    console.log('files====', files)
     files.forEach((file, index) => {
       const reader = new FileReader()
+      reader.readAsDataURL(file)
+      const fileAsBinaryString = reader.result
       reader.onload = () => {
+        console.log('onload======')
+        console.log('this.result======', reader.result)
+        actions.fetchImageUpload({}, {imgData: reader.result})
+        // actions.fetchAdminInfo()
         //base64data
-        const fileAsBinaryString = reader.result
-        console.log('fileAsBinaryString', fileAsBinaryString)
+        // console.log('fileAsBinaryString', fileAsBinaryString)
         // do whatever you want with the file content
-
+        // reader.readAsDataURL(file)
       }
       reader.onabort = () => console.log('file reading was aborted')
       reader.onerror = () => console.log('file reading has failed')
 
-      reader.readAsBinaryString(file)
     })
 
   }
@@ -172,13 +168,12 @@ class UploadFormPage extends React.Component {
 
   }
 
-
-  renderTextField =  ({
-                        input,
-                        label,
-                        meta: { touched, error },
-                        ...custom
-                      }) =>
+  renderTextField = ({
+                       input,
+                       label,
+                       meta: {touched, error},
+                       ...custom
+                     }) =>
     <TextField
       hintText={label}
       floatingLabelText={label}
@@ -206,15 +201,14 @@ class UploadFormPage extends React.Component {
 
 UploadFormPage = reduxForm({
   form: 'UploadFormPage',  // a unique identifier for this form
-  validate,
-  asyncValidate
+  validate
 })(UploadFormPage)
 
 const selector = formValueSelector('UploadFormPage') // <-- same as form name
 
 const mapStateToProps = state => {
   return {
-    form: state.form,
+    form: state.form
     // myValues: selector(state, 'lastName')
   }
 }
@@ -224,14 +218,8 @@ const mapDispatchToProps = dispatch => {
     actions: bindActionCreators(actions, dispatch)
   }
 }
-UploadFormPage = connect(
+export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-  state => {
-    return {
-      myValues: selector(state, 'lastName')
-    }
-  }
+  mapDispatchToProps
 )(UploadFormPage)
 
-export default UploadFormPage
