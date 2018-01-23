@@ -3,9 +3,10 @@ import 'whatwg-fetch'
 // import {busy, idle} from 'src/components/Loader/Loading';
 
 const headers = {
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/json;charset=utf-8',
   'cache-control': 'no-cache',
   'pragma': 'no-cache'
+
 }
 /**
  *

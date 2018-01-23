@@ -1,6 +1,7 @@
 'use strict'
 
 import AdminModel from '../../model/admin/admin'
+import MomentModel from '../../model/moment/moment'
 import crypto from 'crypto'
 import formidable from 'formidable'
 
@@ -330,9 +331,12 @@ class Admin {
           if (respInfo.statusCode == 200) {
             //http://ovc7j3cn8.bkt.clouddn.com/ + ***.jpg/png...
             var imageSrc = bucketDomain + respBody.key
-            res.end(JSON.stringify({status: '20000', msg: '上传成功', imageUrl: imageSrc}), 'utf-8')
+            // res.end(JSON.stringify({status: '20000', msg: '上传成功', data: {imageUrl: imageSrc}}), 'utf-8')
+            res.json({status: '20000', msg: '上传成功', data: {imageUrl: imageSrc}})
+            return
           } else {
-            res.end(JSON.stringify({status: '40000', msg: '上传失败', error: respInfo}))
+            res.json({status: '40000', msg: '上传失败', error: respInfo})
+            return
             // console.log(respInfo.statusCode)
             // console.log(respBody)
           }
@@ -342,7 +346,34 @@ class Admin {
     })
 
     return
+  }
 
+  async saveMoment (req, res, next) {
+    // await MomentModel.create(newAdmin)
+    console.log('req====', req.body)
+    const param = req.body
+    const newMoment = {
+      createTime: new Date(),
+      imageUrl: param.imageUrl,
+      intro: param.intro,
+      userId: param.userId
+    }
+    try {
+      await MomentModel.create(newMoment)
+      res.send({
+        status: 20000,
+        message: '保存成功'
+      })
+    } catch (err) {
+      res.send({
+        status: 40000,
+        type: 'ERROR_PARAMS',
+        message: err.message
+      })
+
+    }
+
+    return
   }
 }
 

@@ -8,6 +8,8 @@ export const dispathcAdminInfo = createAction('dispathcAdminInfo')
 export const fetchAdminInfo = createFetchAction('/api/admin/info', [dispathcAdminInfo], 'get')
 export const dispatchImageUpload = createAction('dispatchImageUpload')
 export const fetchImageUpload = createFetchAction('/api/admin/upload', [dispatchImageUpload], 'post')
+export const dispatchMomentSave = createAction('dispatchMomentSave')
+export const fetchMomentSave = createFetchAction('/api/admin/momentSave', [dispatchMomentSave], 'post')
 
 const reducer = handleActions({
   [dispatchListOK] (state, {payload}) {
@@ -26,6 +28,12 @@ const reducer = handleActions({
     return {
       ...state,
       ImageUpload: payload
+    }
+  },
+  [dispatchMomentSave] (state, {payload}) {
+    return {
+      ...state,
+      momentSave: payload
     }
   }
 }, {})

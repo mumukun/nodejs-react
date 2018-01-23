@@ -31,7 +31,8 @@ class PictureController extends Controller {
     //  Image data flow
     var imgData = req.body.data_uri
     // // 构建本地临时图片名filename
-    var fileName = Date.now() + req.body.filename + '.png'
+    // var fileName = Date.now() + req.body.filename + '.png'
+    var fileName = Date.now() + '.png'
     // // 构建本地图片临时路径
     var filePath = 'temp.png'
     // //过滤data:URL
@@ -47,10 +48,10 @@ class PictureController extends Controller {
           if (respErr) {
             throw respErr
           }
-
           if (respInfo.statusCode == 200) {
             //http://ovc7j3cn8.bkt.clouddn.com/ + ***.jpg/png...
             var imageSrc = bucketDomain + respBody.key
+            res.header('Content-Type', 'application/json; charset=utf-8')
             res.end(JSON.stringify({status: '20000', msg: '上传成功', imageUrl: imageSrc}))
           } else {
             res.end(JSON.stringify({status: '40000', msg: '上传失败', error: respInfo}))

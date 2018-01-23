@@ -16,35 +16,37 @@ import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 import FileFileUpload from 'material-ui/svg-icons/file/file-upload'
 
 import PageBase from 'src/components/Layout/PageBase'
-import asyncValidate from './asyncValidate'
+// import asyncValidate from './asyncValidate'
 import * as actions from '../store/upload'
 
-const validate = values => {
-  const errors = {}
-  // const requiredFields = ['description']
-  const requiredFields = ['']
-  requiredFields.forEach(field => {
-    if (!values[field]) {
-      errors[field] = '必填'
-    }
-  })
-  if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
-  }
-  return errors
-}
+// const validate = values => {
+//   const errors = {}
+//   const requiredFields = ['intro']
+//   requiredFields.forEach(field => {
+//     if (!values[field]) {
+//       errors[field] = '必填'
+//     }
+//   })
+//   // if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+//   //   errors.email = 'Invalid email address'
+//   // }
+//   return errors
+// }
 
 class UploadFormPage extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {files: []}
+    this.state = {
+      files: [],
+      fileList: []
+    }
   }
 
   componetDidMount () {
   }
 
   render () {
-
+    console.log('this.state', this.state)
     const styles = {
       toggleDiv: {
         maxWidth: 300,
@@ -93,7 +95,7 @@ class UploadFormPage extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <div>
             <Field
-              name="description" fullWidth={true} component={this.renderTextField} label="说说这张照片"
+              name="intro" fullWidth={true} component={this.renderTextField} label="说说这张照片"
             />
           </div>
           <section>
@@ -108,6 +110,9 @@ class UploadFormPage extends React.Component {
                 {
                   this.state.files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
                 }
+                {this.state.fileList.map((item, index) => {
+                  return <img key={index} src={item || ''} style={{maxWidth: '25%'}}></img>
+                })}
               </ul>
             </aside>
           </section>
@@ -128,26 +133,26 @@ class UploadFormPage extends React.Component {
   }
 
   onDrop (files) {
+    const that = this
     this.setState({
       files
     })
     const {actions} = this.props
-    console.log('actions', actions)
-    console.log('this', this.props)
-    console.log('files====', files)
+
     files.forEach((file, index) => {
       const reader = new FileReader()
       reader.readAsDataURL(file)
-      const fileAsBinaryString = reader.result
+      // const fileAsBinaryString = reader.result
       reader.onload = () => {
-        console.log('onload======')
-        console.log('this.result======', reader.result)
-        actions.fetchImageUpload({}, {imgData: reader.result})
-        // actions.fetchAdminInfo()
-        //base64data
-        // console.log('fileAsBinaryString', fileAsBinaryString)
-        // do whatever you want with the file content
-        // reader.readAsDataURL(file)
+        actions.fetchImageUpload({}, {filename: '123', imgData: reader.result}).then(rst => {
+          console.log('rst', rst)
+          console.log('rst.status', rst.status)
+          if (rst.status == '20000') {
+            that.setState({
+              fileList: that.state.fileList.concat(rst.data.imageUrl)
+            })
+          }
+        })
       }
       reader.onabort = () => console.log('file reading was aborted')
       reader.onerror = () => console.log('file reading has failed')
@@ -159,12 +164,26 @@ class UploadFormPage extends React.Component {
   handleChange = ({files}) => {
     console.log(files)
   }
-  handleSubmit = (event, values) => {
+
+  /**
+   * 保存
+   * @param event
+   * @param values
+   * @param test
+   */
+  handleSubmit = (event, values, test) => {
     event.preventDefault()
-    console.log('this.props.form', this.props.form)
-    console.log('this.props===', this.props)
-    console.log('event====', event)
-    console.log('values====', values)
+    const {actions} = this.props
+    const {UploadFormPage} = this.props.momentForm
+    console.log('this.state', this.state)
+    const param = {
+      imageUrl: this.state.fileList.join(','),
+      userId: 1,
+      intro: UploadFormPage.values.intro || ''
+    }
+    actions.fetchMomentSave({}, param).then(rst=>{
+      console.log('rst====',rst)
+    })
 
   }
 
@@ -199,18 +218,17 @@ class UploadFormPage extends React.Component {
 
 }
 
-UploadFormPage = reduxForm({
-  form: 'UploadFormPage',  // a unique identifier for this form
-  validate
+const MomentForm = reduxForm({
+  form: 'UploadFormPage'// a unique identifier for this form
+  // validate
 })(UploadFormPage)
 
-const selector = formValueSelector('UploadFormPage') // <-- same as form name
-
 const mapStateToProps = state => {
+  console.log('state======', state)
   return {
-    form: state.form
-    // myValues: selector(state, 'lastName')
+    momentForm: state.form
   }
+  // myValues: selector(state, 'lastName')
 }
 
 const mapDispatchToProps = dispatch => {
@@ -221,5 +239,5 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UploadFormPage)
+)(MomentForm)
 
